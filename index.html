@@ -1,0 +1,429 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#263A86"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Liberdade em Camadas</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Mapa cultural em realidade aumentada do Quilombo Urbano da Liberdade, São Luís – MA.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500&display=swap">
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+/* Layout: mapa ilustrado em camadas no topo, fichas em coluna unica no celular, duas colunas a partir de 900px.
+   Paleta: anil (Rio Anil), cal (parede caiada), urucum, palha e folha. */
+:root {
+  --cal: #F1F3F2; --card: #FFFFFF; --tinta: #161A2C; --muted: #565D72; --linha: #D4D8DF;
+  --anil: #263A86; --anil-suave: #DCE3F5; --rio: #C9D6EE;
+  --urucum: #C2402A; --palha: #B47F14; --folha: #2B7A4F;
+  --c-memoria: var(--anil); --c-reggae: var(--folha); --c-festas: var(--urucum); --c-fe: var(--palha);
+  --display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --texto: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --raio: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --cal: #0E1224; --card: #161B34; --tinta: #E8EAF3; --muted: #A2A8BE; --linha: #2A3152;
+    --anil: #93A6F2; --anil-suave: #222B55; --rio: #1D2A55;
+    --urucum: #F07A5F; --palha: #E2B552; --folha: #63C48F; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --cal: #0E1224; --card: #161B34; --tinta: #E8EAF3; --muted: #A2A8BE; --linha: #2A3152;
+  --anil: #93A6F2; --anil-suave: #222B55; --rio: #1D2A55;
+  --urucum: #F07A5F; --palha: #E2B552; --folha: #63C48F; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--cal); color: var(--tinta); font-family: var(--texto); font-size: 17px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 30; background: var(--anil); }
+a { color: var(--anil); }
+:focus-visible { outline: 3px solid var(--urucum); outline-offset: 2px; border-radius: 4px; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.1; text-wrap: balance; margin: 0; }
+.envolve { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.rotulo { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; }
+
+/* cabecalho */
+.topo { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; background: var(--anil); color: #fff; }
+.topo .envolve { display: flex; align-items: center; gap: 12px; padding-block: 10px; flex-wrap: wrap; }
+.marca { color: #fff; text-decoration: none; display: flex; align-items: center; gap: 10px; margin-right: auto; }
+.marca svg { flex: none; }
+.marca b { font-family: var(--display); font-size: 19px; font-weight: 800; letter-spacing: -.01em; }
+nav { display: flex; gap: 4px; }
+nav a { color: #fff; text-decoration: none; font-size: 15px; padding: 7px 11px; border-radius: 999px; }
+nav a[aria-current="page"] { background: rgba(255,255,255,.18); }
+:root[data-theme="dark"] .topo, :root[data-theme="dark"] body::before { background: #1A2457; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .topo, :root:not([data-theme="light"]) body::before { background: #1A2457; } }
+
+/* inicio */
+.abertura { padding-block: 26px 10px; display: grid; gap: 12px; }
+.abertura h1 { font-size: clamp(34px, 8vw, 64px); font-weight: 800; letter-spacing: -.02em; }
+.abertura h1 span { color: var(--urucum); }
+.abertura p { margin: 0; max-width: 62ch; color: var(--muted); font-size: 18px; }
+.camadas { display: flex; flex-wrap: wrap; gap: 8px; padding-block: 8px 14px; }
+.chip { font: 600 14px/1 var(--texto); border: 1.5px solid var(--linha); background: var(--card); color: var(--tinta); padding: 9px 13px; border-radius: 999px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.chip i { width: 11px; height: 11px; border-radius: 50%; background: var(--cor, var(--tinta)); display: inline-block; }
+.chip[aria-pressed="true"] { border-color: var(--tinta); background: var(--tinta); color: var(--cal); }
+.mapa-caixa { background: var(--card); border: 1px solid var(--linha); border-radius: var(--raio); overflow: hidden; }
+.mapa-caixa svg { display: block; width: 100%; height: auto; }
+.mapa-nota { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; padding: 10px 14px; border-top: 1px solid var(--linha); color: var(--muted); font-size: 14px; }
+.pino { cursor: pointer; }
+.pino .alvo { fill: transparent; }
+.pino text { font-family: var(--mono); font-weight: 500; }
+.pino.apagado { opacity: .18; }
+.pino:focus { outline: none; }
+.pino:focus-visible .bola { stroke: var(--urucum); stroke-width: 6; }
+
+.secao-titulo { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; padding-block: 28px 12px; flex-wrap: wrap; }
+.secao-titulo h2 { font-size: 26px; }
+.lista { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 14px; padding-bottom: 36px; }
+.cartao { display: grid; grid-template-rows: auto 1fr; background: var(--card); border: 1px solid var(--linha); border-radius: var(--raio); overflow: hidden; color: inherit; text-decoration: none; }
+.cartao img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block; background: var(--anil-suave); }
+.cartao .corpo { padding: 12px 14px 16px; display: grid; gap: 6px; align-content: start; min-width: 0; }
+.cartao h3 { font-size: 20px; display: flex; gap: 10px; align-items: baseline; }
+.num { font-family: var(--mono); font-size: 13px; color: #fff; background: var(--cor, var(--anil)); border-radius: 999px; min-width: 26px; height: 26px; display: inline-grid; place-items: center; flex: none; }
+.cartao p { margin: 0; color: var(--muted); font-size: 15px; }
+.tag { color: var(--cor); font-family: var(--mono); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; }
+.cartao[hidden] { display: none; }
+
+/* ficha */
+.ficha { padding-block: 18px 40px; display: grid; gap: 22px; }
+@media (min-width: 900px) { .ficha { grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); align-items: start; } .ficha .visor { position: sticky; top: 76px; } }
+.voltar { display: inline-flex; gap: 6px; align-items: center; font-size: 15px; text-decoration: none; padding-block: 6px; }
+.visor { display: grid; gap: 10px; }
+.palco { position: relative; border-radius: var(--raio); overflow: hidden; background: radial-gradient(120% 90% at 50% 20%, var(--card), var(--anil-suave)); border: 1px solid var(--linha); aspect-ratio: 4 / 3.4; max-width: 100%; }
+model-viewer { width: 100%; height: 100%; --poster-color: transparent; --progress-bar-color: var(--urucum); }
+model-viewer::part(default-poster) { background-size: cover; background-position: center; }
+.carregar { position: absolute; left: 50%; bottom: 16px; transform: translateX(-50%); }
+.botao { font: 700 16px/1 var(--texto); border: 0; border-radius: 999px; padding: 13px 18px; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; white-space: nowrap; }
+.botao.primario { background: var(--urucum); color: #fff; }
+.botao.secundario { background: var(--card); color: var(--tinta); border: 1.5px solid var(--linha); }
+.botao[disabled] { opacity: .5; cursor: default; }
+.ar-btn { position: absolute; right: 12px; bottom: 12px; }
+.acoes { display: flex; flex-wrap: wrap; gap: 8px; }
+.dica { font-size: 14px; color: var(--muted); margin: 0; }
+.texto { min-width: 0; display: grid; gap: 14px; }
+.texto h1 { font-size: clamp(30px, 6vw, 46px); font-weight: 800; letter-spacing: -.015em; }
+.texto p { margin: 0; max-width: 65ch; }
+.fatos { list-style: none; padding: 0; margin: 0; display: grid; gap: 0; border-top: 1px solid var(--linha); }
+.fatos li { display: grid; grid-template-columns: 7.5em 1fr; gap: 10px; padding-block: 9px; border-bottom: 1px solid var(--linha); font-size: 15px; }
+.fatos b { font-family: var(--mono); font-weight: 500; color: var(--cor); font-variant-numeric: tabular-nums; }
+.modelo-nota { background: var(--anil-suave); border-radius: var(--raio); padding: 14px 16px; display: grid; gap: 6px; font-size: 15px; }
+.modelo-nota p { margin: 0; }
+.fontes { margin: 0; padding-left: 1.1em; font-size: 15px; display: grid; gap: 4px; }
+.fontes a { overflow-wrap: anywhere; }
+.navega { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+
+/* marcador e sobre */
+.pagina { padding-block: 22px 44px; display: grid; gap: 18px; max-width: 760px; }
+.pagina h1 { font-size: clamp(30px, 6vw, 46px); font-weight: 800; }
+.pagina h2 { font-size: 22px; margin-top: 8px; }
+.pagina p { margin: 0; }
+.passos { margin: 0; padding-left: 1.3em; display: grid; gap: 8px; }
+.marcadores { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+.marcadores figure { margin: 0; background: #fff; border: 1px solid var(--linha); border-radius: 10px; padding: 8px; display: grid; gap: 6px; color: #161A2C; font-size: 13px; text-align: center; }
+.aviso { border-left: 4px solid var(--urucum); padding: 10px 14px; background: var(--card); border-radius: 0 10px 10px 0; font-size: 15px; }
+.rodape { border-top: 1px solid var(--linha); color: var(--muted); font-size: 14px; }
+.rodape .envolve { padding-block: 18px 28px; display: grid; gap: 4px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<header class="topo">
+  <div class="envolve">
+    <a class="marca" href="#mapa" aria-label="Liberdade em Camadas, início">
+      <svg width="30" height="30" viewBox="0 0 30 30" aria-hidden="true"><rect x="3" y="17" width="24" height="7" rx="2" fill="#D8A23A"/><rect x="5" y="11" width="20" height="7" rx="2" fill="#E2634A"/><rect x="7" y="5" width="16" height="7" rx="2" fill="#fff"/></svg>
+      <b>Liberdade em Camadas</b>
+    </a>
+    <nav aria-label="Seções">
+      <a href="#mapa" data-nav="mapa">Mapa</a>
+      <a href="#marcador" data-nav="marcador">Mapa-marcador</a>
+      <a href="#sobre" data-nav="sobre">Sobre</a>
+    </nav>
+  </div>
+</header>
+
+<main id="conteudo"></main>
+
+<footer class="rodape">
+  <div class="envolve">
+    <span>Liberdade em Camadas · IEMA Pleno São Luís – Cidade Operária</span>
+    <span>Modelos 3D são reconstruções educativas a partir de fotos e fontes; não substituem a visita nem a voz da comunidade.</span>
+  </div>
+</footer>
+
+<script>
+const META = [{"id": "origem", "numero": 1, "x": 250, "y": 300, "escala": "1:17", "mb": 5.3}, {"id": "associacao", "numero": 2, "x": 470, "y": 420, "escala": "1:10", "mb": 2.4}, {"id": "bob-marley", "numero": 3, "x": 640, "y": 330, "escala": "1:7", "mb": 0.9}, {"id": "reggae", "numero": 4, "x": 790, "y": 222, "escala": "1:11", "mb": 2.1}, {"id": "bumba-boi", "numero": 5, "x": 320, "y": 530, "escala": "1:6", "mb": 3.0}, {"id": "tambor-crioula", "numero": 6, "x": 560, "y": 570, "escala": "1:9", "mb": 4.1}, {"id": "terreiro-mina", "numero": 7, "x": 815, "y": 470, "escala": "1:12", "mb": 5.5}, {"id": "divino", "numero": 8, "x": 150, "y": 450, "escala": "1:10", "mb": 3.9}];
+const CAMADAS = {
+  memoria: { nome: "Memória e território", cor: "var(--c-memoria)" },
+  reggae: { nome: "Reggae e arte urbana", cor: "var(--c-reggae)" },
+  festas: { nome: "Festas e brincadeiras", cor: "var(--c-festas)" },
+  fe: { nome: "Religiosidade afro-maranhense", cor: "var(--c-fe)" },
+};
+const PONTOS = [
+  { id: "origem", nome: "Origem do bairro", camada: "memoria",
+    linha: "Do Matadouro Modelo (1918) ao maior quilombo urbano do Brasil.",
+    texto: [
+      "A Liberdade nasceu em torno do Matadouro Modelo, criado em 1918 no antigo Sítio Itamacaca, às margens do Rio Anil. O lugar ficou conhecido como Campina do Matadouro, e o rio era o principal caminho de acesso.",
+      "Famílias negras vindas da Baixada Maranhense, de Alcântara e de outros municípios ocuparam os terrenos alagados e formaram um grande conjunto de palafitas. Em 1967 o bairro passou a se chamar Liberdade e, em 2019, a Fundação Cultural Palmares certificou o território como quilombo urbano."
+    ],
+    fatos: [["1918", "Matadouro Modelo no Sítio Itamacaca"], ["1967", "Lei Municipal nº 1.749: o bairro passa a se chamar Liberdade"], ["2019", "Certificação pela Fundação Cultural Palmares"], ["hoje", "Cerca de 160 mil moradores em Camboa, Diamante, Fé em Deus, Liberdade e Sítio do Meio"]],
+    modelo: "Diorama que se lê da esquerda para a direita: Rio Anil com mangue, palafitas e uma canoa chegando; o Matadouro ao fundo; uma roda de tambor de crioula; uma casa de Mina; e uma placa com a linha do tempo.",
+    interpretacao: "Não encontramos fotos do prédio original do Matadouro (hoje uma escola): a fachada com arcos, os materiais das palafitas e os rostos são interpretação.",
+    fontes: [["O Imparcial: De Matadouro à Liberdade, 100 anos", "https://oimparcial.com.br/cidades/2018/01/100-anos-de-fundacao-da-liberdade/"],
+             ["O Imparcial: Liberdade, um bairro de cultura ancestral latente", "https://oimparcial.com.br/noticias/2025/07/liberdade-um-bairro-de-cultura-ancestral-latente/"],
+             ["Brasil de Fato: conheça a Liberdade, o maior quilombo urbano do Brasil", "https://brasildefato.com.br/2024/07/08/bumba-meu-boi-terreiros-e-tambores-conheca-liberdade-o-maior-quilombo-urbano-do-brasil-no-maranhao/"]] },
+  { id: "associacao", nome: "Associação Quilombola", camada: "memoria",
+    linha: "Sede da Associação dos Remanescentes Quilombolas, com fachada pintada.",
+    texto: [
+      "A sede da Associação dos Remanescentes Quilombolas tem a fachada pintada como uma parede de tábuas, com o letreiro da associação, dois retratos em quadros azuis e um grande logotipo circular com a silhueta de uma mulher de turbante verde, amarelo e vermelho.",
+      "Sob um dos retratos aparece a inscrição “dos Palmares”, referência a Zumbi dos Palmares, símbolo da resistência negra no Brasil. O mural transforma a parede em um marco visível da identidade quilombola do bairro."
+    ],
+    fatos: [["mural", "Letreiro, dois retratos, logotipo circular e folhagens"], ["acesso", "Porta com portão de grade e hall de entrada"], ["medidas", "Fachada de cerca de 7,15 m × 3,0 m (estimada pela foto)"]],
+    modelo: "Recriado a partir de duas fotos, sem as pessoas e os carros que estavam na frente. O letreiro e os retratos vêm da pintura real; o logotipo, as tábuas e as folhagens foram redesenhados.",
+    interpretacao: "A parte de baixo do retrato da mulher, a terceira linha do logotipo (lida numa foto noturna), as laterais e o telhado são reconstrução nossa e precisam ser conferidos no local.",
+    fontes: [["Foto de referência: projeto Fachadas do Quilombo (Nós Assessoria Técnica, ONG Viva Quilombo Liberdade e Grupo Ela Faz)", ""]] },
+  { id: "bob-marley", nome: "Esquina Bob Marley", camada: "reggae",
+    linha: "Mural que celebra a ligação de São Luís com o reggae.",
+    texto: [
+      "Na esquina conhecida como Esquina Bob Marley, um mural homenageia o cantor jamaicano e a forte relação de São Luís com o reggae, que deu à cidade o apelido de “Jamaica brasileira”.",
+      "O reggae se espalhou pelas radiolas e clubes dos bairros populares a partir dos anos 1970 e virou parte da identidade da cidade. Em 2023, a Lei nº 14.668 deu a São Luís o título de Capital Nacional do Reggae."
+    ],
+    fatos: [["2023", "Lei nº 14.668: São Luís, Capital Nacional do Reggae"], ["apelido", "“Jamaica brasileira”"]],
+    modelo: "Modelado a partir de duas fotos do mural, com as cores e as formas da pintura.",
+    interpretacao: "Trechos fora do enquadramento das fotos foram completados por nós.",
+    fontes: [["Planalto: Lei nº 14.668, de 11 de setembro de 2023", "https://www.planalto.gov.br/ccivil_03/_ato2023-2026/2023/lei/L14668.htm"],
+             ["Global Voices: em São Luís, o reggae é identidade local", "https://globalvoices.org/2025/05/12/in-sao-luis-the-city-known-as-the-brazilian-jamaica-reggae-is-a-local-identity/"]] },
+  { id: "reggae", nome: "Estátua do Reggae", camada: "reggae",
+    linha: "Casal dançando “agarradinho” na Avenida do Reggae.",
+    texto: [
+      "Na Avenida do Reggae (antiga Av. IV Centenário), às margens do Rio Anil, uma escultura mostra um casal dançando reggae “agarradinho”, o jeito maranhense de dançar em par. A avenida foi pintada nas cores rastafári e recebeu esculturas ligadas ao reggae.",
+      "Ele usa gorro tricolor, dreadlocks, camisa verde e calça vermelha. Ela tem faixa tricolor na testa, top vermelho e saia em faixas amarela, vermelha e verde."
+    ],
+    fatos: [["local", "Av. do Reggae (antiga Av. IV Centenário)"], ["altura", "Cerca de 2,2 m e 1,9 m (estimativa pela foto)"]],
+    modelo: "Cores, roupas e pose vêm de uma foto. A ilha de gramado, o meio-fio pintado e o canteiro de flores completam a cena.",
+    interpretacao: "Não encontramos escultor, data nem medidas da escultura. Rostos, costas e o formato da ilha são aproximados.",
+    fontes: [["História do Reggae Brasileiro: Avenida do Reggae", "http://reggaebrasilhistoria.blogspot.com/2025/10/avenida-do-reggaesao-luis.html"],
+             ["Brasil de Fato: agarradinho, melôs e radiola", "https://www.brasildefato.com.br/2020/07/24/agarradinho-melos-e-radiola-o-misterio-supremo-da-chegada-do-reggae-no-maranhao"]] },
+  { id: "bumba-boi", nome: "Bumba-meu-boi", camada: "festas",
+    linha: "O boi bordado e as brincantes de cocar de plumas.",
+    texto: [
+      "O Complexo Cultural do Bumba-meu-boi do Maranhão foi reconhecido pela UNESCO como Patrimônio Cultural Imaterial da Humanidade em 2019. No quilombo há grupos tradicionais como o Boi da Fé em Deus e o Boi de Leonardo (Boi da Liberdade), de sotaque de zabumba, e o Boi da Floresta, de Mestre Apolônio, de sotaque da baixada.",
+      "A brincadeira junta o boi bordado, os tocadores e os brincantes, que dançam em volta do boi com roupas bordadas, fitas e chapéus de penas."
+    ],
+    fatos: [["2019", "UNESCO: Patrimônio Cultural Imaterial da Humanidade"], ["sotaques", "Zabumba e baixada, entre os grupos do quilombo"]],
+    modelo: "Feito a partir de fotos de uma apresentação: dançarinas com cocar de plumas e o boi com o corpo bordado.",
+    interpretacao: "O modelo não representa um grupo específico. Rostos e detalhes dos bordados são simplificados.",
+    fontes: [["O Imparcial: Bumba-meu-boi do Maranhão é eleito patrimônio da humanidade", "https://oimparcial.com.br/noticias/2019/12/bumba-meu-boi-do-maranhao-e-eleito-patrimonio-cultural-imaterial-da-humanidade/"],
+             ["O Imparcial: Liberdade, um bairro de cultura ancestral latente", "https://oimparcial.com.br/noticias/2025/07/liberdade-um-bairro-de-cultura-ancestral-latente/"]] },
+  { id: "tambor-crioula", nome: "Tambor de Crioula", camada: "festas",
+    linha: "A roda das coreiras, a parelha de tambores e a punga.",
+    texto: [
+      "Patrimônio Cultural do Brasil desde 2007, o tambor de crioula é tocado por três tambores, a parelha: o tambor grande, preso à cintura do tocador, e o meião e o crivador, tocados com o tocador sentado sobre eles. As matracas batem no corpo do tambor grande, e os couros são afinados no calor da fogueira.",
+      "As coreiras dançam em roda com saia rodada de chita, blusa branca de renda e torço na cabeça. No centro, a punga (umbigada) passa a vez de uma dançarina para outra. A festa é ligada à devoção a São Benedito. Na Liberdade, a Turma dos Crioulos, de Mestra Rosa Barbosa, é o grupo de tambor de crioula mais antigo em atividade em São Luís."
+    ],
+    fatos: [["2007", "Patrimônio Cultural do Brasil"], ["parelha", "Tambor grande, meião e crivador"], ["padroeiro", "São Benedito"]],
+    modelo: "Roda completa: parelha de tambores, matraqueiro, coreiras com punga no centro, fogueira de afinar e altar de São Benedito na casinha.",
+    interpretacao: "As medidas dos tambores, as cores das roupas e a posição dos tocadores na roda variam entre os grupos e foram escolhidas por nós.",
+    fontes: [["Brasil de Fato: 18 de junho, Dia Nacional do Tambor de Crioula", "https://www.brasildefato.com.br/2021/06/18/18-de-junho-e-dia-nacional-do-tambor-de-crioula"],
+             ["O Imparcial: conheça o espetáculo do tambor de crioula", "https://oimparcial.com.br/noticias/2017/06/conheca-o-espetaculo-do-tambor-de-crioula/"],
+             ["Dossiê Tambores da Ilha", "https://www.ipatrimonio.org/wp-content/uploads/2017/05/Dossie_-tambores_da_ilha.pdf"]] },
+  { id: "terreiro-mina", nome: "Terreiro de Mina", camada: "fe",
+    linha: "O toque dos abatás no salão de um terreiro.",
+    texto: [
+      "O Tambor de Mina é uma religião afro-maranhense que cultua voduns, orixás, gentis e caboclos (encantados). No quilombo, o Terreiro de Iemanjá, fundado em 1954 no bairro Fé em Deus, é a casa de Mina mais antiga.",
+      "No toque, dois abatás (tambores de duas peles sobre cavalete), o tambor da mata, o ferro e as cabaças conduzem a dança. As dançantes usam saias longas na cor da entidade, blusa branca, guias e rosários. Toy Averekete é associado a São Benedito."
+    ],
+    fatos: [["1954", "Terreiro de Iemanjá, no bairro Fé em Deus"], ["toque", "Abatás, tambor da mata, ferro e cabaças"], ["vestes", "Saia longa, blusa branca, guias, rosários e toalha bordada"]],
+    modelo: "Salão em corte para ver o interior: tocadores, dançantes em roda, mãe de santo junto à mesa com crucifixo, imagens e velas, e bandeirolas.",
+    interpretacao: "É um terreiro genérico e não reproduz nenhuma casa real. Cores, decoração e posição dos tocadores são suposições e devem ser validadas com o povo de terreiro.",
+    fontes: [["Brasil de Fato: conheça a Liberdade", "https://brasildefato.com.br/2024/07/08/bumba-meu-boi-terreiros-e-tambores-conheca-liberdade-o-maior-quilombo-urbano-do-brasil-no-maranhao/"],
+             ["O Imparcial: Terreiro de Yemanjá é tema de exposição", "https://oimparcial.com.br/entretenimento-e-cultura/2018/11/terreiro-de-yemanja-e-tema-de-exposicao-em-sao-luis/"],
+             ["GP Mina/UFMA: Casa Fanti-Ashanti", "https://www.gpmina.ufma.br/wp-content/uploads/2017/04/LP-CFA.pdf"],
+             ["UFMA: Tambor-de-Mina em São Luís", "https://repositorio.ufma.br/jspui/bitstream/1/204/1/Mina-da%20MPF%20aos%20nossos%20dias.pdf"]] },
+  { id: "divino", nome: "Festa do Divino", camada: "festas",
+    linha: "O Império, as caixeiras e o mastro do Divino Espírito Santo.",
+    texto: [
+      "A Festa do Divino Espírito Santo é uma das grandes festas do Maranhão, celebrada em Alcântara, em São Luís e também em terreiros do quilombo. O Império, formado por crianças vestidas de nobres, a tribuna com o trono, o mastro enfeitado e a bandeira do Divino com a pomba fazem parte da festa.",
+      "As caixeiras, em geral mulheres mais velhas, cantam e tocam caixas pintadas de vermelho e branco ou de azul e branco. Muitas famílias que formaram a Liberdade vieram de Alcântara, onde a festa é uma tradição centenária."
+    ],
+    fatos: [["Império", "Imperatriz, mordomos, aias e vassalo"], ["música", "Caixeiras com caixas pintadas"], ["símbolos", "Coroa, cetro, pomba e mastro"]],
+    modelo: "Cena baseada na festa de Alcântara: tribuna com trono e altar, Império, seis caixeiras, bandeireiras, mastro e mesa de doces.",
+    interpretacao: "Não consultamos fotos da festa: trajes e cores das caixeiras, a altura do mastro e os rostos são interpretação a partir de textos.",
+    fontes: [["O Imparcial: Festa do Divino de Alcântara, uma tradição centenária", "https://oimparcial.com.br/noticias/2026/05/festa-do-divino-espirito-santo-de-alcantara-uma-tradicao-centenaria/"],
+             ["UFMA/GP Mina: Festa do Divino no Maranhão", "https://www.gpmina.ufma.br/arquivos/Festa%20do%20Divino%20no%20Maranhao.pdf"],
+             ["O Imparcial: Maranhão reconhece Quilombo Liberdade como patrimônio cultural", "https://oimparcial.com.br/noticias/2025/09/maranhao-reconhece-quilombo-liberdade-como-patrimonio-cultural/"]] },
+];
+const META_BY = Object.fromEntries(META.map(m => [m.id, m]));
+const $ = (s, el = document) => el.querySelector(s);
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const main = $("#conteudo");
+let filtro = "todas";
+try { filtro = localStorage.getItem("camada") || "todas"; } catch (e) {}
+
+function mapaSVG() {
+  const pinos = PONTOS.map(p => {
+    const m = META_BY[p.id], cor = CAMADAS[p.camada].cor;
+    return `<g class="pino" data-id="${p.id}" data-camada="${p.camada}" tabindex="0" role="link" aria-label="${m.numero}. ${esc(p.nome)}">
+      <circle class="alvo" cx="${m.x}" cy="${m.y}" r="52"/>
+      <circle class="bola" cx="${m.x}" cy="${m.y}" r="30" style="fill:${cor}" stroke="var(--card)" stroke-width="4"/>
+      <text x="${m.x}" y="${m.y + 10}" text-anchor="middle" font-size="30" fill="#fff">${m.numero}</text>
+      <text x="${m.x}" y="${m.y + 66}" text-anchor="middle" font-size="27" font-weight="700" fill="var(--tinta)" paint-order="stroke" stroke="var(--card)" stroke-width="7" font-family="Atkinson Hyperlegible, system-ui, sans-serif">${esc(p.nome)}</text>
+    </g>`;
+  }).join("");
+  return `<svg viewBox="0 0 1000 700" role="img" aria-label="Mapa ilustrativo do território quilombola da Liberdade com 8 pontos culturais">
+    <rect width="1000" height="700" fill="var(--card)"/>
+    <path d="M0 0H1000V70C820 150 560 60 380 120C230 170 110 110 0 160Z" fill="var(--rio)"/>
+    <text x="60" y="78" font-family="IBM Plex Mono, monospace" font-size="22" letter-spacing="4" fill="var(--anil)">RIO ANIL</text>
+    <path d="M0 200C130 150 240 210 390 160C560 105 820 195 1000 115" fill="none" stroke="var(--palha)" stroke-width="9" stroke-linecap="round"/>
+    <text x="520" y="186" font-size="19" fill="var(--palha)" font-family="IBM Plex Mono, monospace">AV. DO REGGAE (IV CENTENÁRIO)</text>
+    <path d="M60 240C300 200 700 270 950 200L965 650C600 690 300 640 40 670Z" fill="none" stroke="var(--urucum)" stroke-width="3" stroke-dasharray="12 8"/>
+    <text x="70" y="640" font-size="18" fill="var(--urucum)" font-family="IBM Plex Mono, monospace">TERRITÓRIO QUILOMBOLA</text>
+    ${pinos}
+  </svg>`;
+}
+
+function viewMapa() {
+  const chips = [["todas", "Todas as camadas", "var(--tinta)"], ...Object.entries(CAMADAS).map(([k, v]) => [k, v.nome, v.cor])]
+    .map(([k, n, c]) => `<button class="chip" type="button" data-camada="${k}" aria-pressed="${filtro === k}" style="--cor:${c}"><i></i>${n}</button>`).join("");
+  const cartoes = PONTOS.map(p => {
+    const m = META_BY[p.id], c = CAMADAS[p.camada];
+    return `<a class="cartao" href="#ponto-${p.id}" data-camada="${p.camada}" style="--cor:${c.cor}">
+      <img src="capas/${p.id}.jpg" alt="Prévia do modelo 3D: ${esc(p.nome)}" loading="lazy" width="960" height="540">
+      <div class="corpo"><span class="tag">${c.nome}</span><h3><span class="num">${m.numero}</span>${esc(p.nome)}</h3><p>${esc(p.linha)}</p></div></a>`;
+  }).join("");
+  main.innerHTML = `<div class="envolve">
+    <section class="abertura">
+      <span class="rotulo" style="color:var(--urucum)">Quilombo Urbano da Liberdade · São Luís – MA</span>
+      <h1>Liberdade em <span>Camadas</span></h1>
+      <p>Um mapa cultural em realidade aumentada. Toque num ponto para ver a história, girar a maquete em 3D e colocá-la sobre a mesa pela câmera do celular.</p>
+    </section>
+    <div class="camadas" role="group" aria-label="Filtrar por camada">${chips}</div>
+    <div class="mapa-caixa">${mapaSVG()}
+      <div class="mapa-nota"><span>Mapa ilustrativo, fora de escala. Posições aproximadas.</span><span>Camboa · Diamante · Fé em Deus · Liberdade · Sítio do Meio</span></div>
+    </div>
+    <div class="secao-titulo"><h2>Pontos do mapa</h2><a href="#marcador">Usar com o mapa impresso</a></div>
+    <div class="lista">${cartoes}</div></div>`;
+  main.querySelectorAll(".chip").forEach(b => b.addEventListener("click", () => { filtro = b.dataset.camada; try { localStorage.setItem("camada", filtro); } catch (e) {} aplicaFiltro(); }));
+  main.querySelectorAll(".pino").forEach(g => {
+    const ir = () => { location.hash = "ponto-" + g.dataset.id; };
+    g.addEventListener("click", ir);
+    g.addEventListener("keydown", e => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); ir(); } });
+  });
+  aplicaFiltro();
+}
+function aplicaFiltro() {
+  main.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.camada === filtro)));
+  main.querySelectorAll(".pino").forEach(g => g.classList.toggle("apagado", filtro !== "todas" && g.dataset.camada !== filtro));
+  main.querySelectorAll(".cartao").forEach(c => { c.hidden = filtro !== "todas" && c.dataset.camada !== filtro; });
+}
+
+function viewPonto(id) {
+  const i = PONTOS.findIndex(p => p.id === id);
+  if (i < 0) return viewMapa();
+  const p = PONTOS[i], m = META_BY[id], c = CAMADAS[p.camada];
+  const ant = PONTOS[(i + PONTOS.length - 1) % PONTOS.length], prox = PONTOS[(i + 1) % PONTOS.length];
+  const fontes = p.fontes.map(([t, u]) => u ? `<li><a href="${u}" target="_blank" rel="noopener">${esc(t)}</a></li>` : `<li>${esc(t)}</li>`).join("");
+  const fatos = p.fatos.map(([k, v]) => `<li><b>${esc(k)}</b><span>${esc(v)}</span></li>`).join("");
+  const mb = String(m.mb).replace(".", ",");
+  main.innerHTML = `<div class="envolve" style="--cor:${c.cor}">
+    <a class="voltar" href="#mapa">← Voltar ao mapa</a>
+    <article class="ficha">
+      <div class="visor">
+        <div class="palco">
+          <model-viewer id="mv" poster="capas/${p.id}.jpg" alt="Maquete 3D: ${esc(p.nome)}" camera-controls touch-action="pan-y"
+            ar ar-modes="webxr scene-viewer quick-look" ar-scale="auto" shadow-intensity="1" exposure="1.05"
+            camera-orbit="25deg 62deg auto" interaction-prompt="auto">
+            <button slot="ar-button" class="botao primario ar-btn" type="button">Ver no seu espaço (RA)</button>
+          </model-viewer>
+          <button class="botao primario carregar" id="carregar" type="button">Abrir maquete 3D · ${mb} MB</button>
+        </div>
+        <p class="dica" id="dica">Maquete na escala ${m.escala}. Arraste para girar e use dois dedos para aproximar. No celular, o botão de RA coloca a maquete sobre uma superfície real.</p>
+        <div class="acoes">
+          <button class="botao secundario" id="ouvir" type="button">Ouvir o texto</button>
+          <a class="botao secundario" href="#marcador">Ver pelo mapa-marcador</a>
+        </div>
+      </div>
+      <div class="texto">
+        <span class="tag">${m.numero} · ${c.nome}</span>
+        <h1>${esc(p.nome)}</h1>
+        ${p.texto.map(t => `<p>${esc(t)}</p>`).join("")}
+        <ul class="fatos">${fatos}</ul>
+        <div class="modelo-nota"><span class="rotulo">Sobre o modelo 3D</span><p>${esc(p.modelo)}</p><p><b>Interpretação:</b> ${esc(p.interpretacao)}</p></div>
+        <div><h2 style="font-size:20px;margin-bottom:8px">Fontes</h2><ol class="fontes">${fontes}</ol></div>
+        <div class="navega"><a href="#ponto-${ant.id}">← ${esc(ant.nome)}</a><a href="#ponto-${prox.id}">${esc(prox.nome)} →</a></div>
+      </div>
+    </article></div>`;
+  const mv = $("#mv"), bt = $("#carregar");
+  bt.addEventListener("click", () => { bt.disabled = true; bt.textContent = "Carregando…"; mv.src = `modelos/${p.id}.glb`; });
+  mv.addEventListener("load", () => { bt.hidden = true; });
+  mv.addEventListener("error", () => { bt.disabled = false; bt.textContent = "Não carregou. Tentar de novo"; });
+  const ouvir = $("#ouvir");
+  if (!("speechSynthesis" in window)) { ouvir.hidden = true; }
+  else ouvir.addEventListener("click", () => {
+    if (speechSynthesis.speaking) { speechSynthesis.cancel(); ouvir.textContent = "Ouvir o texto"; return; }
+    const u = new SpeechSynthesisUtterance(p.nome + ". " + p.texto.join(" "));
+    u.lang = "pt-BR"; u.rate = 1;
+    const v = speechSynthesis.getVoices().find(v => v.lang && v.lang.toLowerCase().startsWith("pt"));
+    if (v) u.voice = v;
+    u.onend = () => { ouvir.textContent = "Ouvir o texto"; };
+    ouvir.textContent = "Parar áudio";
+    speechSynthesis.speak(u);
+  });
+}
+
+function viewMarcador() {
+  const figs = PONTOS.map(p => `<figure><img src="marcadores/${p.id}.png" alt="Marcador ${META_BY[p.id].numero}" width="160" height="160"><figcaption>${META_BY[p.id].numero}. ${esc(p.nome)}</figcaption></figure>`).join("");
+  main.innerHTML = `<div class="envolve"><section class="pagina">
+    <span class="rotulo" style="color:var(--urucum)">Realidade aumentada com o mapa impresso</span>
+    <h1>Mapa-marcador</h1>
+    <p>Cada ponto do mapa impresso tem um marcador quadrado. Quando a câmera do celular reconhece o marcador, a maquete 3D daquele ponto aparece em cima do papel.</p>
+    <h2>Como usar</h2>
+    <ol class="passos">
+      <li>Imprima o mapa-marcador em A3 (ou os cartões em A4) na escala 100%, sem “ajustar à página”.</li>
+      <li>Abra este site no celular e toque em <b>Abrir câmera</b>. Permita o uso da câmera.</li>
+      <li>Aponte para um marcador, a uns 30 a 50 cm, com boa luz e sem reflexo no papel.</li>
+      <li>Toque no nome que aparece na tela para abrir a ficha completa do ponto.</li>
+    </ol>
+    <div class="acoes">
+      <a class="botao primario" href="ar.html">Abrir câmera</a>
+      <a class="botao secundario" href="impressao/mapa-marcador.pdf" target="_blank" rel="noopener">Mapa-marcador (A3, PDF)</a>
+      <a class="botao secundario" href="impressao/cartoes-marcadores.pdf" target="_blank" rel="noopener">Cartões (A4, PDF)</a>
+    </div>
+    <p class="aviso">A câmera precisa do site aberto direto no navegador do celular (Chrome no Android, Safari no iPhone), com endereço https. Se a página estiver aberta dentro de outro aplicativo, use “abrir no navegador”.</p>
+    <h2>Marcadores</h2>
+    <div class="marcadores">${figs}</div>
+  </section></div>`;
+}
+
+function viewSobre() {
+  main.innerHTML = `<div class="envolve"><section class="pagina">
+    <span class="rotulo" style="color:var(--urucum)">Sobre o projeto</span>
+    <h1>Realidade aumentada e educação patrimonial no maior quilombo urbano do Brasil</h1>
+    <p>O Território Quilombola Liberdade reúne memórias, práticas culturais e espaços de resistência fundamentais à identidade afro-maranhense. Este site é a parte digital do projeto <b>Liberdade em Camadas</b>, que desenvolve e avalia uma experiência de realidade aumentada sobre a história e as referências culturais do bairro, com estudantes do Ensino Médio.</p>
+    <h2>Como o projeto funciona</h2>
+    <p>Pesquisa aplicada, de abordagem mista e delineamento quase-experimental, precedida de pesquisa bibliográfica, documental e visita de campo, com validação do conteúdo por representante cultural da comunidade. Trinta estudantes do IEMA Pleno São Luís – Cidade Operária participam em dois grupos: um usa um painel ilustrado e o outro usa o mesmo conteúdo em RA, acionado pelo mapa-marcador. Questionários de conhecimento e uma escala de interesse são aplicados antes e depois da atividade.</p>
+    <h2>Equipe</h2>
+    <p>Fernando Lucas Santos Cordeiro (IEMA Pleno São Luís – Cidade Operária), Pedro Otavio de Souza Rocha e Julia Santos Ferreira.<br>Eixo II: Patrimônio Material/Imaterial e Território – Outras Narrativas Possíveis.</p>
+    <h2>Sobre os modelos 3D</h2>
+    <p>As maquetes foram construídas a partir de fotos e de fontes jornalísticas e acadêmicas. Cada ficha separa o que vem das fontes do que é interpretação. Os modelos devem ser revistos com a comunidade, que é a referência para a seleção e a interpretação dos conteúdos.</p>
+    <h2>Referências</h2>
+    <ol class="fontes">
+      <li>BRAGA, Marcio Gomes. <i>Ensino médio e a história local: o Quilombo Urbano da Liberdade em São Luís do Maranhão</i>. Dissertação (Mestrado Profissional em Ensino de História), UFMA, 2025.</li>
+      <li>CHANG, Hsin-Yi et al. Ten years of augmented reality in education: a meta-analysis of (quasi-)experimental studies to investigate the impact. <i>Computers &amp; Education</i>, v. 191, 104641, 2022. <a href="https://doi.org/10.1016/j.compedu.2022.104641" target="_blank" rel="noopener">doi:10.1016/j.compedu.2022.104641</a></li>
+      <li>SÃO LUÍS (Município). Prefeito Eduardo Braide inaugura Centro de Cultura e Turismo do Quilombo Urbano no bairro Liberdade. 21 nov. 2023. <a href="https://www.saoluis.ma.gov.br/portal/noticias/0/3/930" target="_blank" rel="noopener">saoluis.ma.gov.br</a></li>
+      <li>SILVA, Mariana Queen Cardoso da. <i>Quilombo urbano Liberdade, patrimônio afro de São Luís-MA: a sistemática da acessibilidade aos direitos culturais</i>. Dissertação (Mestrado em Cultura e Sociedade), UFMA, 2023.</li>
+    </ol>
+  </section></div>`;
+}
+
+function rota() {
+  const h = (location.hash || "#mapa").slice(1);
+  const secao = h.startsWith("ponto-") ? "mapa" : (["marcador", "sobre"].includes(h) ? h : "mapa");
+  document.querySelectorAll("[data-nav]").forEach(a => { if (a.dataset.nav === secao) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+  if ("speechSynthesis" in window) speechSynthesis.cancel();
+  if (h.startsWith("ponto-")) viewPonto(h.slice(6));
+  else if (h === "marcador") viewMarcador();
+  else if (h === "sobre") viewSobre();
+  else viewMapa();
+  window.scrollTo(0, 0);
+}
+window.addEventListener("hashchange", rota);
+rota();
+</script>
+</body></html>

@@ -1,0 +1,6 @@
+{
+  "headers": [
+    { "source": "/modelos/(.*)", "headers": [ { "key": "Content-Type", "value": "model/gltf-binary" }, { "key": "Cache-Control", "value": "public, max-age=604800" } ] },
+    { "source": "/marcadores/(.*).patt", "headers": [ { "key": "Content-Type", "value": "text/plain; charset=utf-8" } ] }
+  ]
+}
