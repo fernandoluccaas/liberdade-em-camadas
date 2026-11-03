@@ -9,4 +9,6 @@ Projeto do IEMA Pleno São Luís – Cidade Operária: realidade aumentada e edu
 - `marcadores/`: padrões `.patt` do AR.js e imagens dos marcadores.
 - `impressao/`: mapa-marcador (A3) e cartões (A4) em PDF. Imprima em 100%.
 
-Site estático: não precisa de build. A câmera exige https (Vercel ou GitHub Pages).
+Site estático: não precisa de build. A câmera exige https.
+
+No ar: https://liberdade-em-camadas.vercel.app
