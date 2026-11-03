@@ -153,7 +153,7 @@ const CAMADAS = {
   memoria: { nome: "Memória e território", cor: "var(--c-memoria)" },
   reggae: { nome: "Reggae e arte urbana", cor: "var(--c-reggae)" },
   festas: { nome: "Festas e brincadeiras", cor: "var(--c-festas)" },
-  fe: { nome: "Religiosidade afro-maranhense", cor: "var(--c-fe)" },
+  fe: { nome: "Religiosidade", cor: "var(--c-fe)" },
 };
 const PONTOS = [
   { id: "origem", nome: "Origem do bairro", camada: "memoria",
@@ -236,7 +236,7 @@ const PONTOS = [
              ["O Imparcial: Terreiro de Yemanjá é tema de exposição", "https://oimparcial.com.br/entretenimento-e-cultura/2018/11/terreiro-de-yemanja-e-tema-de-exposicao-em-sao-luis/"],
              ["GP Mina/UFMA: Casa Fanti-Ashanti", "https://www.gpmina.ufma.br/wp-content/uploads/2017/04/LP-CFA.pdf"],
              ["UFMA: Tambor-de-Mina em São Luís", "https://repositorio.ufma.br/jspui/bitstream/1/204/1/Mina-da%20MPF%20aos%20nossos%20dias.pdf"]] },
-  { id: "divino", nome: "Festa do Divino", camada: "festas",
+  { id: "divino", nome: "Festa do Divino", camada: "festas", outras: ["fe"],
     linha: "O Império, as caixeiras e o mastro do Divino Espírito Santo.",
     texto: [
       "A Festa do Divino Espírito Santo é uma das grandes festas do Maranhão, celebrada em Alcântara, em São Luís e também em terreiros do quilombo. O Império, formado por crianças vestidas de nobres, a tribuna com o trono, o mastro enfeitado e a bandeira do Divino com a pomba fazem parte da festa.",
@@ -250,6 +250,8 @@ const PONTOS = [
              ["O Imparcial: Maranhão reconhece Quilombo Liberdade como patrimônio cultural", "https://oimparcial.com.br/noticias/2025/09/maranhao-reconhece-quilombo-liberdade-como-patrimonio-cultural/"]] },
 ];
 const META_BY = Object.fromEntries(META.map(m => [m.id, m]));
+const camadasDe = p => [p.camada, ...(p.outras || [])];
+const nomesCamadas = p => camadasDe(p).map(k => CAMADAS[k].nome).join(" · ");
 const $ = (s, el = document) => el.querySelector(s);
 const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const main = $("#conteudo");
@@ -259,7 +261,7 @@ try { filtro = localStorage.getItem("camada") || "todas"; } catch (e) {}
 function mapaSVG() {
   const pinos = PONTOS.map(p => {
     const m = META_BY[p.id], cor = CAMADAS[p.camada].cor;
-    return `<g class="pino" data-id="${p.id}" data-camada="${p.camada}" tabindex="0" role="link" aria-label="${m.numero}. ${esc(p.nome)}">
+    return `<g class="pino" data-id="${p.id}" data-camadas="${camadasDe(p).join(' ')}" tabindex="0" role="link" aria-label="${m.numero}. ${esc(p.nome)}">
       <circle class="alvo" cx="${m.x}" cy="${m.y}" r="52"/>
       <circle class="bola" cx="${m.x}" cy="${m.y}" r="30" style="fill:${cor}" stroke="var(--card)" stroke-width="4"/>
       <text x="${m.x}" y="${m.y + 10}" text-anchor="middle" font-size="30" fill="#fff">${m.numero}</text>
@@ -283,9 +285,9 @@ function viewMapa() {
     .map(([k, n, c]) => `<button class="chip" type="button" data-camada="${k}" aria-pressed="${filtro === k}" style="--cor:${c}"><i></i>${n}</button>`).join("");
   const cartoes = PONTOS.map(p => {
     const m = META_BY[p.id], c = CAMADAS[p.camada];
-    return `<a class="cartao" href="#ponto-${p.id}" data-camada="${p.camada}" style="--cor:${c.cor}">
+    return `<a class="cartao" href="#ponto-${p.id}" data-camadas="${camadasDe(p).join(' ')}" style="--cor:${c.cor}">
       <img src="capas/${p.id}.jpg" alt="Prévia do modelo 3D: ${esc(p.nome)}" loading="lazy" width="960" height="540">
-      <div class="corpo"><span class="tag">${c.nome}</span><h3><span class="num">${m.numero}</span>${esc(p.nome)}</h3><p>${esc(p.linha)}</p></div></a>`;
+      <div class="corpo"><span class="tag">${nomesCamadas(p)}</span><h3><span class="num">${m.numero}</span>${esc(p.nome)}</h3><p>${esc(p.linha)}</p></div></a>`;
   }).join("");
   main.innerHTML = `<div class="envolve">
     <section class="abertura">
@@ -309,8 +311,9 @@ function viewMapa() {
 }
 function aplicaFiltro() {
   main.querySelectorAll(".chip").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.camada === filtro)));
-  main.querySelectorAll(".pino").forEach(g => g.classList.toggle("apagado", filtro !== "todas" && g.dataset.camada !== filtro));
-  main.querySelectorAll(".cartao").forEach(c => { c.hidden = filtro !== "todas" && c.dataset.camada !== filtro; });
+  const fora = el => filtro !== "todas" && !el.dataset.camadas.split(" ").includes(filtro);
+  main.querySelectorAll(".pino").forEach(g => g.classList.toggle("apagado", fora(g)));
+  main.querySelectorAll(".cartao").forEach(c => { c.hidden = fora(c); });
 }
 
 function viewPonto(id) {
@@ -320,7 +323,6 @@ function viewPonto(id) {
   const ant = PONTOS[(i + PONTOS.length - 1) % PONTOS.length], prox = PONTOS[(i + 1) % PONTOS.length];
   const fontes = p.fontes.map(([t, u]) => u ? `<li><a href="${u}" target="_blank" rel="noopener">${esc(t)}</a></li>` : `<li>${esc(t)}</li>`).join("");
   const fatos = p.fatos.map(([k, v]) => `<li><b>${esc(k)}</b><span>${esc(v)}</span></li>`).join("");
-  const mb = String(m.mb).replace(".", ",");
   main.innerHTML = `<div class="envolve" style="--cor:${c.cor}">
     <a class="voltar" href="#mapa">← Voltar ao mapa</a>
     <article class="ficha">
@@ -331,7 +333,7 @@ function viewPonto(id) {
             camera-orbit="25deg 62deg auto" interaction-prompt="auto">
             <button slot="ar-button" class="botao primario ar-btn" type="button">Ver no seu espaço (RA)</button>
           </model-viewer>
-          <button class="botao primario carregar" id="carregar" type="button">Abrir maquete 3D · ${mb} MB</button>
+          <button class="botao primario carregar" id="carregar" type="button">Abrir maquete 3D</button>
         </div>
         <p class="dica" id="dica">Maquete na escala ${m.escala}. Arraste para girar e use dois dedos para aproximar. No celular, o botão de RA coloca a maquete sobre uma superfície real.</p>
         <div class="acoes">
@@ -340,7 +342,7 @@ function viewPonto(id) {
         </div>
       </div>
       <div class="texto">
-        <span class="tag">${m.numero} · ${c.nome}</span>
+        <span class="tag">${m.numero} · ${nomesCamadas(p)}</span>
         <h1>${esc(p.nome)}</h1>
         ${p.texto.map(t => `<p>${esc(t)}</p>`).join("")}
         <ul class="fatos">${fatos}</ul>
